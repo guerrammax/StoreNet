@@ -30,6 +30,13 @@ namespace StoreNet
              services.AddDbContext<HealthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // Add Cors
+            services.AddCors(o => o.AddPolicy("HealthPolicy", builder => {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +54,8 @@ namespace StoreNet
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+             DummyData.Initialize(app);
         }
     }
 }
